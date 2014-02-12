@@ -1,0 +1,61 @@
+import simplegui 
+import time
+
+counter = 0
+total_stops = 0
+sucess_stops = 0
+stopped = True
+      
+# Event handlers for buttons    
+def start():
+    global stopped
+    timer.start()
+    stopped = False
+    
+def stop():
+    global stopped, total_stops, sucess_stops
+    timer.stop()
+    if stopped == False:
+        total_stops = total_stops + 1
+        #print "the number of total stop is " + str(total_stops)
+        if (counter) % 10 == 0:
+            #print str(sucess_stops)
+            sucess_stops = sucess_stops + 1      
+            #print(counter)
+    stopped = True
+    
+def reset():
+    global counter
+    counter = 0
+    global total_stops
+    global sucess_stops
+    total_stops = 0
+    sucess_stops = 0
+    
+def draw_time(canvas):
+    canvas.draw_text(str(formattime(counter)), [125, 150], 24, "White")
+    canvas.draw_text(str(sucess_stops) + "/" + str(total_stops), [250, 50], 12, "White")
+def formattime(t):
+    A = (t // 600)
+    B = ((t // 10) % 60) // 10
+    C = ((t // 10) % 60) % 10
+    D = (t % 10)
+    return str(A) + ":" + str(B) + str(C) +"." +str(D)
+
+# Timer handler
+def tick():
+    global counter
+    counter += 1
+      
+# Create frame and timer
+frame = simplegui.create_frame("Counter with buttons", 300, 300)
+frame.set_canvas_background('Black')
+frame.set_draw_handler(draw_time)
+frame.add_button("Start", start, 100)
+frame.add_button("Stop", stop, 100)
+frame.add_button("Reset", reset, 100)
+timer = simplegui.create_timer(100, tick)
+
+#Start timer
+frame.start()
+reset()
