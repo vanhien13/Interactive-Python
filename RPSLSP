@@ -1,0 +1,47 @@
+import random
+def number_to_name(number):
+    if number == 0:
+        return "Rock"
+    elif number == 1:
+        return "Spock"
+    elif number == 2:
+        return "Paper"
+    elif number == 3:
+        return "Lizard"
+    elif number == 4:
+        return "Scissors"
+
+def name_to_number(name):
+    if name == "Rock":
+        return 0
+    elif name == "Spock":
+        return 1
+    elif name == "Paper":
+        return 2
+    elif name == "Lizard":
+        return 3
+    elif name == "Scissors":
+        return 4
+    
+def RPSLSP(Player_Choice):
+    Computer_Choice_Number = random.randrange(0,5)
+    Player_Choice_Number = name_to_number(Player_Choice)
+    Computer_Choice = number_to_name(Computer_Choice_Number)
+    Diff = Computer_Choice_Number - Player_Choice_Number
+    #print (Diff)
+    Mod =  Diff % 5
+    #print (Mod)
+    print ("Computer chooses:" + str(Computer_Choice))
+    print ("Player chooses:" + str(Player_Choice))
+    if Mod == 1 or Mod == 2:
+        print ("Computer Wins\n")
+    elif Mod == 0:
+        print ("We have a Tie\n")
+    else:
+        print ("Player Wins\n")
+
+RPSLSP("Rock")
+RPSLSP("Paper")
+RPSLSP("Scissors")
+RPSLSP("Lizard")
+RPSLSP("Spock")
