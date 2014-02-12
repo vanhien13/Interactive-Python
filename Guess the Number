@@ -1,0 +1,83 @@
+# template for "Guess the number" mini-project
+# input will come from buttons and an input field
+# all output for the game will be printed in the console
+
+import simplegui
+import random
+import math
+
+# initialize global variables used in your code
+
+counter = 0
+max_number = 100
+secrete_number = 0
+
+#helper function to start and restart the game
+def new_game():
+    if max_number == 100:
+        range100()
+    elif max_nubmer == 1000:
+        range1000()
+
+# define event handlers for control panel
+def range100():
+    print "Please guess a number between 0 and 100"
+    global max_number 
+    max_number = 100
+    global counter
+    counter = 7
+    global secrete_number 
+    secrete_number = random.randrange(0, 100)
+    #print secrete_number
+    return secrete_number
+    
+def range1000():
+    # button that changes range to range [0,1000) and restarts
+    print "Please guess a number between 0 and 1000"
+    global max_number 
+    max_number = 100
+    global counter 
+    counter = 10
+    global secrete_number 
+    secrete_number = random.randrange(0, 1000)
+    #print secrete_number    
+    return secrete_number
+    
+def input_guess(guess):
+    # main game logic goes here
+    global secrete_number, counter, max_number
+    #print(guess)
+    Diff = int(guess) - secrete_number
+    #print(Diff)
+    if Diff < 0:
+        print ("Guess was: " + str(guess) + " too low")
+    if Diff > 0:
+        print ("Guess was: " + str(guess) + " too high")     
+    if Diff == 0:
+        print ("Guess was: " + str(guess) + " You guess right")
+        new_game()
+    global counter
+    counter = counter -1
+    if counter > 0:
+        print ("You have: " + str(counter) + " guesses left!")
+    elif counter == 0:
+        print ("You are out of guesses, sorry!")
+        print ("The correct number was: " + str(secrete_number))
+        new_game()
+        
+    
+# create window(s)
+f = simplegui.create_frame("Guess the number", 200, 200)
+
+# create control elememts for window
+f.add_button("Range is [0,100)", range100, 200)
+f.add_button("Range is [0,1000)", range1000, 200)
+f.add_input("Enter a guess", input_guess, 200)
+
+
+# call new_game and start frame
+f.start
+
+
+# always remember to check your completed program against the grading rubric
+
