@@ -1,0 +1,93 @@
+# implementation of card game - Memory
+
+import simplegui
+import random
+cards = []
+exposed = [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False] 
+card_number = 0
+state = 0
+index1 = 0
+index2 = 0
+index1_pos = 0
+index2_pos = 0
+moves = 0
+# helper function to initialize globals
+def new_game():
+    global cards, exposed, state, moves
+    exposed = [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
+    card_number = 0
+    state = 0
+    moves = 0
+    L1 = range(0,8)
+    L2 = range(0,8)
+    cards = (L1 + L2) #you need to shuffle after this line!
+    random.shuffle(cards)
+# define event handlers
+def mouseclick(pos):
+    global card_number, state, index1, index2, index1_pos, index2_pos, moves
+    # add game state logic here
+    print "Mouse click at " + str(pos)
+    #print exposed[1] 
+    # identify and print the card number
+    card_number = pos[0]//50 
+    if not exposed[card_number]:
+        if state == 0:
+            exposed[card_number] = True
+            index1_pos = card_number #here you assign a list to index1, you need to remember which card is flipped here
+            #index1 =  cards[card_number]
+            print index1
+            print index1_pos
+            #print exposed[index1_pos]
+            state = 1     
+            print "state1:" + str(state)
+        elif state == 1:
+            exposed[card_number] = True
+            #index2 = cards[card_number]
+            index2_pos = card_number
+            print index2
+            print index2_pos
+            state = 2
+            print "state2:" + str(state)
+        elif state == 2:
+            exposed[card_number] = True
+            if cards[index1_pos] == cards[index2_pos]:
+                pass
+#here you need to check if the two flipped numbers have the same value, if not you need to set exposed[i] back to false
+            else:
+                exposed[index1_pos] = False 
+                exposed[index2_pos] = False
+            index1_pos = card_number        
+            state = 1
+            moves +=1
+            print "state3:" + str(state)
+    #print card_number
+    #print cards[8]                    
+# cards are logically 50x100 pixels in size    
+def draw(canvas):
+    global card_number
+    i = 0
+    for card_number in range(len((cards))):
+        if exposed[card_number] == True: #here you should not use the value of the card to index exposed, rather loop over range(16), this is why two cards are displayed !
+            canvas.draw_text(str((cards[card_number])), (10+i * 50, 65), 50, 'Blue')
+            i += 1
+        else:
+            canvas.draw_polygon([(i*50, 0),((i+1)*50,0),((i+1)*50,100),(i*50,100)],5,"White","Blue")
+            i += 1
+    label.set_text("Moves = " + str(moves))
+            
+# create frame and add a button and labels
+frame = simplegui.create_frame("Memory", 800, 100)
+frame.add_button("Restart", new_game)
+label = frame.add_label("Turns = 0")
+
+new_game()
+# register event handlers
+frame.set_mouseclick_handler(mouseclick)
+frame.set_draw_handler(draw)
+
+# get things rolling
+new_game()
+frame.start()
+
+
+# Always remember to review the grading rubric
